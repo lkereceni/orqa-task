@@ -1,0 +1,29 @@
+@import url("./variables.css");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: var(--color-bg-100);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+a {
+  color: var(--color-primary-500);
+  text-decoration: none;
+
+  :hover {
+    text-decoration: underline;
+  }
+}
