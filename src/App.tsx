@@ -4,6 +4,8 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AuthProvider from "./providers/AuthProvider";
 import Login from "./pages/Login/Login";
+import UserManagement from "./pages/UserManagement/UserManagement";
+import MainLayout from "./layouts/MainLayout";
 
 function App() {
   return (
@@ -20,8 +22,12 @@ function App() {
           />
 
           <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route element={<MainLayout />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/user-management" element={<UserManagement />} />
+
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
