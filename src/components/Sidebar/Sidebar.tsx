@@ -1,16 +1,19 @@
-import { useState } from "react";
 import "./Sidebar.css";
 import type { MenuItem } from "../../types";
-import { FaBars, FaHome, FaUser } from "react-icons/fa";
-import { FaX } from "react-icons/fa6";
+import { FaHome, FaUser } from "react-icons/fa";
+import { FaArrowRightFromBracket, FaX } from "react-icons/fa6";
 import { useAuth } from "../../hooks/useAuth";
 import logo from "../../assets/orqa_logo.png";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
-const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface SidebarProps {
+  isSidebarOpen: boolean;
+  onSidebarStateChange: (isOpen: boolean) => void;
+}
 
-  const { user } = useAuth();
+const Sidebar = ({ isSidebarOpen, onSidebarStateChange }: SidebarProps) => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const menuItems: MenuItem[] = [
     {
@@ -27,26 +30,37 @@ const Sidebar = () => {
     },
   ];
 
-  return (
-    <div>
-      <button
-        className="menu-toggle"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label="Toggle navigation menu"
-        aria-expanded={isOpen}
-      >
-        <FaBars />
-      </button>
+  const handleLogout = async () => {
+    try {
+      await logout();
+      onSidebarStateChange(false);
+      navigate("/login", { replace: true });
+    } catch (error) {
+      console.error("Logout error: ", error);
+    }
+  };
 
-      {isOpen && (
+  const handleNavLinkClick = () => {
+    if (window.innerWidth < 1024) {
+      onSidebarStateChange(false);
+    }
+  };
+
+  const handleCloseSidebar = () => {
+    onSidebarStateChange(false);
+  };
+
+  return (
+    <>
+      {isSidebarOpen && (
         <div
           className="sidebar-backdrop"
-          onClick={() => setIsOpen(false)}
+          onClick={handleCloseSidebar}
           aria-hidden="true"
         ></div>
       )}
 
-      <nav className={`sidebar ${isOpen ? "open" : ""}`}>
+      <nav className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
         <div className="sidebar-header">
           <div className="logo-container">
             <img className="logo-image" src={logo} alt="Orqa Logo" />
@@ -55,7 +69,7 @@ const Sidebar = () => {
 
           <button
             className="close-button"
-            onClick={() => setIsOpen(false)}
+            onClick={handleCloseSidebar}
             aria-label="Close navigation menu"
           >
             <FaX />
@@ -70,11 +84,7 @@ const Sidebar = () => {
                 className={({ isActive }) =>
                   `nav-link ${isActive ? "active" : ""}`
                 }
-                onClick={() => {
-                  if (window.innerWidth < 768) {
-                    setIsOpen(false);
-                  }
-                }}
+                onClick={handleNavLinkClick}
               >
                 <span className="nav-icon">{item.icon}</span>
                 <span className="nav-label">{item.label}</span>
@@ -84,17 +94,19 @@ const Sidebar = () => {
         </ul>
 
         <div className="sidebar-footer">
-          <a href="#" className="user-profile">
-            <div className="avatar">
-              <FaUser />
-            </div>
-            <div className="user-info">
-              <p className="user-username">{user?.username}</p>
-            </div>
-          </a>
+          <ul className="nav-list">
+            <li>
+              <button className="nav-link" onClick={handleLogout}>
+                <span className="nav-icon">
+                  <FaArrowRightFromBracket />
+                </span>
+                <span className="nav-label">Log Out</span>
+              </button>
+            </li>
+          </ul>
         </div>
       </nav>
-    </div>
+    </>
   );
 };
 
