@@ -1,4 +1,9 @@
-import { useEffect, useState, type PropsWithChildren } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type PropsWithChildren,
+} from "react";
 import type { User } from "../types";
 import { AuthContext } from "../context/AuthContext";
 import { authService } from "../services/authService";
@@ -22,7 +27,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     setIsLoading(false);
   }, []);
 
-  const login = async (username: string, password: string) => {
+  const login = useCallback(async (username: string, password: string) => {
     setIsLoading(true);
 
     try {
@@ -41,26 +46,24 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     setIsLoading(true);
 
     try {
       await authService.logout();
-
+    } catch (error) {
+      console.error("Logout failed: ", error);
+    } finally {
       setUser(null);
       setToken(null);
+      setIsLoading(false);
 
       localStorage.removeItem("auth_token");
       localStorage.removeItem("auth_user");
-    } catch (error) {
-      console.error("Logout failed: ", error);
-      throw error;
-    } finally {
-      setIsLoading(false);
     }
-  };
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, token, isLoading, login, logout }}>

@@ -1,12 +1,27 @@
 import "./MainLayout.css";
 import Sidebar from "../components/Sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
+import Navbar from "../components/Navbar/Navbar";
+import { useState } from "react";
 
 const MainLayout = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const handleToggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <div className="main-layout">
-      <Sidebar />
+      <Sidebar
+        isSidebarOpen={isSidebarOpen}
+        onSidebarStateChange={setIsSidebarOpen}
+      />
       <div className="layout-content">
+        <Navbar
+          onToggleSidebar={handleToggleSidebar}
+          isSidebarOpen={isSidebarOpen}
+        />
         <main className="page-content">
           <Outlet />
         </main>
