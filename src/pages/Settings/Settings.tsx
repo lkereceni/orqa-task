@@ -30,8 +30,6 @@ const Settings = () => {
       <h2>Settings</h2>
       <p>Update your username and password</p>
 
-      {error && <ErrorToast message={error.message} onClose={clearError} />}
-
       <div className="settings-container">
         <Card className="settings-card">
           <div className="form-group">
@@ -52,6 +50,8 @@ const Settings = () => {
             Save Changes
           </button>
         </Card>
+
+        {error && <ErrorToast message={error.message} onClose={clearError} />}
       </div>
     </>
   );
