@@ -1,9 +1,9 @@
 import "../Modals.css";
 import type { UserData } from "../../../types";
-import React, { useState } from "react";
 import Card from "../../CoreComponents/Card/Card";
 import ModalHeader from "../Core/ModalHeader/ModalHeader";
 import ModalFooter from "../Core/ModalFooter/ModalFooter";
+import useAddUserForm from "../../../hooks/useAddUserForm";
 
 interface AddUserModalProps {
   isOpen: boolean;
@@ -12,89 +12,31 @@ interface AddUserModalProps {
 }
 
 const AddUserModal = ({ isOpen, onAddUser, onClose }: AddUserModalProps) => {
-  const [formData, setFormData] = useState<UserData>({
-    id: "",
-    firstName: "",
-    lastName: "",
-    role: "user" as const,
-  });
+  const { formData, errors, handleChange, handleSubmit, resetForm } =
+    useAddUserForm();
 
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    if (errors[name]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[name];
-        return newErrors;
-      });
-    }
-  };
-
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required";
-    }
-
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
-    }
-
-    if (!formData.role.trim()) {
-      newErrors.role = "Role is required";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleReset = () => {
-    setFormData({
-      id: "",
-      firstName: "",
-      lastName: "",
-      role: "user",
-    });
-    setErrors({});
+  const handleClose = () => {
+    resetForm();
     onClose();
   };
 
-  const handleSubmit = (e: React.SubmitEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) return;
-
-    const newUser: UserData = {
-      id: String(Date.now()),
-      firstName: formData.firstName.trim(),
-      lastName: formData.lastName.trim(),
-      role: formData.role as "admin" | "user" | "moderator",
-    };
-
-    onAddUser(newUser);
-    handleReset();
+  const handleFormSubmit = (e: React.SubmitEvent) => {
+    const newUser = handleSubmit(e);
+    if (newUser) {
+      onAddUser(newUser);
+      handleClose();
+    }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={handleReset}>
+    <div className="modal-overlay" onClick={handleClose}>
       <Card className="modal-card">
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-          <ModalHeader title="Add New User" onClose={handleReset} />
+          <ModalHeader title="Add New User" onClose={handleClose} />
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleFormSubmit}>
             <div className="modal-body">
               <div className="form-group">
                 <label htmlFor="firstName">First Name</label>
@@ -148,7 +90,7 @@ const AddUserModal = ({ isOpen, onAddUser, onClose }: AddUserModalProps) => {
             <ModalFooter
               submitText="Add User"
               submitType="submit"
-              onCancel={handleReset}
+              onCancel={handleClose}
             />
           </form>
         </div>

@@ -1,55 +1,28 @@
-import type React from "react";
+import { useState, useCallback } from "react";
 import type { UserData } from "../types";
-import { useCallback, useState } from "react";
 
-interface UseAddUserModalReturn {
-  isOpen: boolean;
+interface UseAddUserFormReturn {
   formData: {
     firstName: string;
     lastName: string;
     role: "admin" | "user" | "moderator";
   };
   errors: Record<string, string>;
-
-  openModal: () => void;
-  closeModal: () => void;
   handleChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => void;
-  handleSubmit: (e: React.FormEvent) => boolean;
+  handleSubmit: (e: React.SubmitEvent) => UserData | null;
   resetForm: () => void;
-
-  newUser: UserData | null;
 }
 
-export const useAddUserModal = (): UseAddUserModalReturn => {
-  const [isOpen, setIsOpen] = useState(false);
+export const useAddUserForm = (): UseAddUserFormReturn => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     role: "user" as const,
   });
+
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [newUser, setNewUser] = useState<UserData | null>(null);
-
-  const resetForm = useCallback(() => {
-    setFormData({
-      firstName: "",
-      lastName: "",
-      role: "user",
-    });
-    setErrors({});
-    setNewUser(null);
-  }, []);
-
-  const closeModal = useCallback(() => {
-    setIsOpen(false);
-    resetForm();
-  }, [resetForm]);
-
-  const openModal = useCallback(() => {
-    setIsOpen(true);
-  }, []);
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -60,7 +33,6 @@ export const useAddUserModal = (): UseAddUserModalReturn => {
         [name]: value,
       }));
 
-      // Clear error when user starts typing
       if (errors[name]) {
         setErrors((prev) => {
           const newErrors = { ...prev };
@@ -83,7 +55,7 @@ export const useAddUserModal = (): UseAddUserModalReturn => {
       newErrors.lastName = "Last name is required";
     }
 
-    if (!formData.role) {
+    if (!formData.role.trim()) {
       newErrors.role = "Role is required";
     }
 
@@ -95,35 +67,38 @@ export const useAddUserModal = (): UseAddUserModalReturn => {
     (e: React.FormEvent) => {
       e.preventDefault();
 
-      if (!validateForm()) return false;
+      if (!validateForm()) {
+        return null;
+      }
 
-      const user: UserData = {
+      const newUser: UserData = {
         id: String(Date.now()),
         firstName: formData.firstName.trim(),
         lastName: formData.lastName.trim(),
         role: formData.role as "admin" | "user" | "moderator",
       };
 
-      setNewUser(user);
-      resetForm();
-      setIsOpen(false);
-
-      return true;
+      return newUser;
     },
-    [formData, validateForm, resetForm],
+    [formData, validateForm],
   );
 
+  const resetForm = useCallback(() => {
+    setFormData({
+      firstName: "",
+      lastName: "",
+      role: "user",
+    });
+    setErrors({});
+  }, []);
+
   return {
-    isOpen,
     formData,
     errors,
-    openModal,
-    closeModal,
     handleChange,
     handleSubmit,
     resetForm,
-    newUser,
   };
 };
 
-export default useAddUserModal;
+export default useAddUserForm;

@@ -3,6 +3,7 @@ import Card from "../../CoreComponents/Card/Card";
 import ModalHeader from "../Core/ModalHeader/ModalHeader";
 import ModalFooter from "../Core/ModalFooter/ModalFooter";
 import type { UserData } from "../../../types";
+import useDeleteUserConfirm from "../../../hooks/useDeleteUserConfirm";
 
 interface DeleteUserModalProps {
   isOpen: boolean;
@@ -23,9 +24,12 @@ const DeleteUserModal = ({
     onClose();
   };
 
-  const handleDelete = () => {
+  const { handleDelete } = useDeleteUserConfirm();
+
+  const handleDeleteClick = () => {
     if (user) {
-      onDelete(user.id);
+      const userId = handleDelete(user);
+      onDelete(userId);
     }
   };
 
@@ -45,7 +49,7 @@ const DeleteUserModal = ({
             submitText="Delete User"
             submitType="button"
             onCancel={handleClose}
-            onSubmit={handleDelete}
+            onSubmit={handleDeleteClick}
             isSubmitting={isDeleting}
           />
         </div>

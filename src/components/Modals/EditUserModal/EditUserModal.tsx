@@ -1,9 +1,10 @@
 import "../Modals.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import type { UserData } from "../../../types";
 import Card from "../../CoreComponents/Card/Card";
 import ModalHeader from "../Core/ModalHeader/ModalHeader";
 import ModalFooter from "../Core/ModalFooter/ModalFooter";
+import useEditUserForm from "../../../hooks/useEditUserForm";
 
 interface EditUserModalProps {
   isOpen: boolean;
@@ -18,94 +19,35 @@ const EditUserModal = ({
   onClose,
   onSave,
 }: EditUserModalProps) => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    role: "",
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const {
+    formData,
+    errors,
+    handleChange,
+    handleSubmit,
+    resetForm,
+    populateForm,
+  } = useEditUserForm();
 
   useEffect(() => {
-    if (user) {
-      setFormData({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        role: user.role,
-      });
-      setErrors({});
+    if (user && isOpen) {
+      populateForm(user);
     }
-  }, [user, isOpen]);
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    if (errors[name]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[name];
-        return newErrors;
-      });
-    }
-  };
-
-  const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = "First name is required";
-    }
-
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = "Last name is required";
-    }
-
-    if (!formData.role) {
-      newErrors.role = "Role is required";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
-
-    if (!user) {
-      return;
-    }
-
-    const updatedUser: UserData = {
-      id: user.id,
-      firstName: formData.firstName.trim(),
-      lastName: formData.lastName.trim(),
-      role: formData.role as "admin" | "user" | "moderator",
-    };
-
-    onSave(updatedUser);
-    handleClose();
-  };
+  }, [user, isOpen, populateForm]);
 
   const handleClose = () => {
-    setFormData({
-      firstName: "",
-      lastName: "",
-      role: "user",
-    });
-    setErrors({});
+    resetForm();
     onClose();
   };
 
+  const handleFormSubmit = (e: React.SubmitEvent) => {
+    if (!user) return;
+
+    const updatedUser = handleSubmit(e, user);
+    if (updatedUser) {
+      onSave(updatedUser);
+      handleClose();
+    }
+  };
   if (!isOpen || !user) {
     return null;
   }
@@ -116,7 +58,7 @@ const EditUserModal = ({
         <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <ModalHeader title="Edit User" onClose={handleClose} />
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleFormSubmit}>
             <div className="modal-body">
               {/* First Name */}
               <div className="form-group">
