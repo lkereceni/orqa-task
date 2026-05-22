@@ -2,10 +2,15 @@
   width: 100%;
   height: fit-content;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   border: 1px solid var(--color-border-200);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
   padding: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+  .card-container {
+    padding: var(--spacing-md);
+  }
 }

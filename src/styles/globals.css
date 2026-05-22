@@ -19,12 +19,17 @@ button {
   border: none;
   font-family: inherit;
   background-color: var(--color-primary-500);
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--border-radius);
   color: white;
 
   &:hover {
     background-color: var(--color-primary-600);
+  }
+
+  &.btn-secondary {
+    background-color: transparent;
+    border: 1px solid var(--color-primary-500);
   }
 }
 
@@ -38,12 +43,15 @@ a {
   }
 }
 
-input {
-  padding: var(--spacing-xs) var(--spacing-sm);
+input,
+select {
+  width: 100%;
+  padding: var(--spacing-sm);
   border-radius: var(--border-radius);
   border: 1px solid var(--color-border-100);
   background-color: var(--color-bg-200);
   color: white;
+  transition: all var(--transition-speed);
 
   &::placeholder {
     opacity: 0.5;
@@ -51,7 +59,8 @@ input {
   }
 
   &:focus {
-    border-color: var(--color-primary-700);
+    border-color: var(--color-border-100);
+    box-shadow: var(--shadow-md);
   }
 
   &:focus-visible {
