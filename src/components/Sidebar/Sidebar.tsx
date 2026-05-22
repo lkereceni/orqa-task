@@ -1,6 +1,6 @@
 import "./Sidebar.css";
 import type { MenuItem } from "../../types";
-import { FaHome, FaUser } from "react-icons/fa";
+import { FaCog, FaHome, FaUser } from "react-icons/fa";
 import { FaArrowRightFromBracket, FaX } from "react-icons/fa6";
 import { useAuth } from "../../hooks/useAuth";
 import logo from "../../assets/orqa_logo.png";
@@ -95,6 +95,20 @@ const Sidebar = ({ isSidebarOpen, onSidebarStateChange }: SidebarProps) => {
 
         <div className="sidebar-footer">
           <ul className="nav-list">
+            <li>
+              <NavLink
+                to="/settings"
+                className={({ isActive }) =>
+                  `nav-link ${isActive ? "active" : ""}`
+                }
+                onClick={handleNavLinkClick}
+              >
+                <span className="nav-icon">
+                  <FaCog />
+                </span>
+                <span className="nav-label">Settings</span>
+              </NavLink>
+            </li>
             <li>
               <button className="nav-link" onClick={handleLogout}>
                 <span className="nav-icon">

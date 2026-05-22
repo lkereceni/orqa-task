@@ -1,6 +1,7 @@
 import { useEffect, type PropsWithChildren } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import Loading from "../components/CoreComponents/Loading/Loading";
 
 type ProtectedRouteProps = PropsWithChildren & {
   requireAuth?: boolean;
@@ -24,7 +25,7 @@ export default function ProtectedRoute({
   }, [isLoading, user, navigate, requireAuth]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (children) {
