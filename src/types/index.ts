@@ -12,3 +12,10 @@ export type MenuItem = {
   icon: ReactElement;
   url: string;
 };
+
+export type UserData = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+};

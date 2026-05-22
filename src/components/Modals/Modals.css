@@ -1,0 +1,82 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn var(--transition-speed) ease-out;
+  padding: var(--spacing-sm);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-card {
+  background-color: var(--color-bg-200);
+  width: fit-content;
+  min-width: 300px;
+  box-shadow: var(--shadow-md);
+  animation: slideUp var(--transition-speed) ease-out;
+  padding: 0;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-content {
+  width: 100%;
+}
+
+.modal-body {
+  padding: var(--spacing-md);
+}
+
+.form-group {
+  margin-bottom: var(--spacing-md);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  label {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+  }
+}
+
+.form-input.input-error {
+  border-color: var(--color-error);
+  background-color: rgba(--color-error, 0.05);
+
+  &:focus {
+    box-shadow: var(--shadow-md);
+  }
+}
+
+.error-message {
+  display: block;
+  margin-top: var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-error);
+}
