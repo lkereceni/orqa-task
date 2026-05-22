@@ -7,6 +7,7 @@ import Login from "./pages/Login/Login";
 import UserManagement from "./pages/UserManagement/UserManagement";
 import MainLayout from "./layouts/MainLayout";
 import NotFound from "./pages/NotFound/NotFound";
+import Settings from "./pages/Settings/Settings";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route element={<MainLayout />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/user-management" element={<UserManagement />} />
+              <Route path="/settings" element={<Settings />} />
 
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
             </Route>

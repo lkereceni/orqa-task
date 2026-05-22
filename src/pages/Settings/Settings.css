@@ -1,0 +1,17 @@
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 600px;
+  margin: var(--spacing-lg) auto;
+}
+
+.settings-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.settings-save-button {
+  width: fit-content;
+}
