@@ -4,49 +4,40 @@ import {
   useState,
   type PropsWithChildren,
 } from "react";
-import type { User } from "../types";
 import { AuthContext } from "../context/AuthContext";
 import { authService } from "../services/authService";
+import { useAuthState } from "../hooks/useAuthState";
 
 type AuthProviderProps = PropsWithChildren;
 
 export default function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { user, token, setAuthData, clearAuthData, loadStoredAuth } =
+    useAuthState();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem("auth_token");
-    const storedUser = localStorage.getItem("auth_user");
+    loadStoredAuth();
+  }, [loadStoredAuth]);
 
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
-    }
+  const login = useCallback(
+    async (username: string, password: string) => {
+      setIsLoading(true);
 
-    setIsLoading(false);
-  }, []);
+      try {
+        const response = await authService.login(username, password);
 
-  const login = useCallback(async (username: string, password: string) => {
-    setIsLoading(true);
-
-    try {
-      const response = await authService.login(username, password);
-
-      if (response.status === 200) {
-        setToken(response.token);
-        setUser(response.user);
-
-        localStorage.setItem("auth_token", response.token);
-        localStorage.setItem("auth_user", JSON.stringify(response.user));
+        if (response.status === 200) {
+          setAuthData(response.token, response.user);
+        }
+      } catch (error) {
+        console.error("Login failed: ", error);
+        throw error;
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error("Login failed: ", error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    },
+    [setAuthData],
+  );
 
   const logout = useCallback(async () => {
     setIsLoading(true);
@@ -56,14 +47,10 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     } catch (error) {
       console.error("Logout failed: ", error);
     } finally {
-      setUser(null);
-      setToken(null);
+      clearAuthData();
       setIsLoading(false);
-
-      localStorage.removeItem("auth_token");
-      localStorage.removeItem("auth_user");
     }
-  }, []);
+  }, [clearAuthData]);
 
   return (
     <AuthContext.Provider value={{ user, token, isLoading, login, logout }}>
