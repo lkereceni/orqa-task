@@ -1,10 +1,12 @@
+import type { UserData } from "../../features/users";
+import {
+  AddUserModal,
+  DeleteUserModal,
+  EditUserModal,
+  UsersTable,
+} from "../../features/users";
 import "./UserManagement.css";
-import UsersTable from "../../components/UsersTable/UsersTable";
-import type { UserData } from "../../types";
-import AddUserModal from "../../components/Modals/AddUserModal/AddUserModal";
 import { useState } from "react";
-import EditUserModal from "../../components/Modals/EditUserModal/EditUserModal";
-import DeleteUserModal from "../../components/Modals/DeleteUserModal/DeleteUserModal";
 
 const UserManagement = () => {
   const [users, setUsers] = useState<UserData[]>([

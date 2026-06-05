@@ -1,9 +1,9 @@
 import "./Settings.css";
 import { useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
-import ErrorToast from "../../components/ErrorHandling/ErrorToast/ErrorToast";
-import { useApiError } from "../../hooks/useApiError";
-import Card from "../../components/CoreComponents/Card/Card";
+import Card from "../../shared/components/Card/Card";
+import { useAuth } from "../../features/auth";
+import { useApiError } from "../../shared/hooks/useApiError";
+import ErrorToast from "../../shared/components/ErrorToast/ErrorToast";
 
 const Settings = () => {
   const { user } = useAuth();

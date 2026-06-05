@@ -1,28 +1,17 @@
-import {
-  useCallback,
-  useEffect,
-  useState,
-  type PropsWithChildren,
-} from "react";
+import { useCallback, useState, type PropsWithChildren } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { authService } from "../services/authService";
 import { useAuthState } from "../hooks/useAuthState";
+import { authService } from "../services/authService";
 
 type AuthProviderProps = PropsWithChildren;
 
 export default function AuthProvider({ children }: AuthProviderProps) {
-  const { user, token, setAuthData, clearAuthData, loadStoredAuth } =
-    useAuthState();
+  const { user, token, setAuthData, clearAuthData } = useAuthState();
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    loadStoredAuth();
-  }, [loadStoredAuth]);
 
   const login = useCallback(
     async (username: string, password: string) => {
       setIsLoading(true);
-
       try {
         const response = await authService.login(username, password);
 

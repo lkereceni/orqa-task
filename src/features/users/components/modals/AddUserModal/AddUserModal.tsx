@@ -1,9 +1,9 @@
-import "../Modals.css";
-import type { UserData } from "../../../types";
-import Card from "../../CoreComponents/Card/Card";
-import ModalHeader from "../Core/ModalHeader/ModalHeader";
-import ModalFooter from "../Core/ModalFooter/ModalFooter";
+import Card from "../../../../../shared/components/Card/Card";
+import ModalFooter from "../../../../../shared/components/Modals/ModalFooter/ModalFooter";
+import ModalHeader from "../../../../../shared/components/Modals/ModalHeader/ModalHeader";
+import "../../../../../shared/components/Modals/Modals.css";
 import useAddUserForm from "../../../hooks/useAddUserForm";
+import type { UserData } from "../../../types";
 
 interface AddUserModalProps {
   isOpen: boolean;

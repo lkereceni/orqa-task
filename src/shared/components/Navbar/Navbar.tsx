@@ -1,6 +1,6 @@
 import { FaBars, FaSearch, FaUser } from "react-icons/fa";
 import "./Navbar.css";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../../features/auth";
 
 interface NavbarProps {
   onToggleSidebar: () => void;

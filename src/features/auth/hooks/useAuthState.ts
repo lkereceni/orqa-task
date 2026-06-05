@@ -2,8 +2,14 @@ import { useCallback, useState } from "react";
 import type { User } from "../types";
 
 export const useAuthState = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    const stored = localStorage.getItem("auth_user");
+
+    return stored ? JSON.parse(stored) : null;
+  });
+  const [token, setToken] = useState<string | null>(() =>
+    localStorage.getItem("auth_token"),
+  );
 
   const setAuthData = useCallback((token: string, user: User) => {
     setToken(token);
@@ -19,20 +25,10 @@ export const useAuthState = () => {
     localStorage.removeItem("auth_user");
   }, []);
 
-  const loadStoredAuth = useCallback(() => {
-    const storedToken = localStorage.getItem("auth_token");
-    const storedUser = localStorage.getItem("auth_user");
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
-
   return {
     user,
     token,
     setAuthData,
     clearAuthData,
-    loadStoredAuth,
   };
 };

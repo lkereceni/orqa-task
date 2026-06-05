@@ -1,7 +1,7 @@
-import "./UsersTable.css";
-import Card from "../CoreComponents/Card/Card";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import Card from "../../../../shared/components/Card/Card";
 import type { UserData } from "../../types";
+import "./UsersTable.css";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 interface UsersTableProps {
   data: UserData[];

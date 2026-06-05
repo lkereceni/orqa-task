@@ -1,10 +1,10 @@
-import "../Modals.css";
-import React, { useEffect } from "react";
-import type { UserData } from "../../../types";
-import Card from "../../CoreComponents/Card/Card";
-import ModalHeader from "../Core/ModalHeader/ModalHeader";
-import ModalFooter from "../Core/ModalFooter/ModalFooter";
+import { useEffect } from "react";
+import "../../../../../shared/components/Modals/Modals.css";
 import useEditUserForm from "../../../hooks/useEditUserForm";
+import type { UserData } from "../../../types";
+import Card from "../../../../../shared/components/Card/Card";
+import ModalHeader from "../../../../../shared/components/Modals/ModalHeader/ModalHeader";
+import ModalFooter from "../../../../../shared/components/Modals/ModalFooter/ModalFooter";
 
 interface EditUserModalProps {
   isOpen: boolean;
