@@ -1,7 +1,7 @@
 import { useEffect, type PropsWithChildren } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-import Loading from "../components/CoreComponents/Loading/Loading";
+import Loading from "../shared/components/Loading/Loading";
+import { useAuth } from "../features/auth";
 
 type ProtectedRouteProps = PropsWithChildren & {
   requireAuth?: boolean;

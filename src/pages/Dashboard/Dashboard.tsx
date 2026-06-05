@@ -1,5 +1,5 @@
 import "./Dashboard.css";
-import Card from "../../components/CoreComponents/Card/Card";
+import Card from "../../shared/components/Card/Card";
 
 const Dashboard = () => {
   return (

@@ -1,7 +1,7 @@
 import "./Login.css";
 
-import Card from "../../components/CoreComponents/Card/Card";
-import LoginForm from "../../components/LoginForm/LoginForm";
+import Card from "../../shared/components/Card/Card";
+import { LoginForm } from "../../features/auth";
 
 const Login = () => {
   return (

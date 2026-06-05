@@ -1,10 +1,10 @@
 import "./Sidebar.css";
-import type { MenuItem } from "../../types";
+import type { MenuItem } from "../../../types";
 import { FaCog, FaHome, FaUser } from "react-icons/fa";
 import { FaArrowRightFromBracket, FaX } from "react-icons/fa6";
-import { useAuth } from "../../hooks/useAuth";
-import logo from "../../assets/orqa_logo.png";
+import logo from "../../../assets/orqa_logo.png";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../features/auth";
 
 interface SidebarProps {
   isSidebarOpen: boolean;
