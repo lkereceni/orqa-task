@@ -11,6 +11,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   const login = useCallback(
     async (username: string, password: string) => {
+      setIsLoading(true);
       try {
         const response = await authService.login(username, password);
 
